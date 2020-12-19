@@ -1,0 +1,37 @@
+<h2 class="header">
+  Welcome to PDF Viewer
+</h2>
+<div class="margin-left">
+  <a href="./../assets/Help/Help.html">Read Me</a>
+</div>
+<div class="form-group">
+  <div class="load-file" (click)="loadFile()">
+    Load PDF
+  </div>
+  <input style="display: none;" type="file" #inputFile id="file" accept=".pdf"
+    (change)="handleFileInput($event.target.files)" />
+</div>
+<div class="file-detail" *ngIf="PDFFile">
+  File Name : {{PDFFile.name}} <span class="download" (click)="downloadFile()">Download</span>
+  <p class="navigation">
+    <span *ngIf="SelectedPage != 0" (click)="viewPage(SelectedPage-1)">Previous |</span>
+    <span *ngIf="SelectedPage>-1">Page: {{SelectedPage+1}}</span>
+    <span *ngIf="SelectedPage != PDFPages.length-1" (click)="viewPage(SelectedPage+1)">| Next</span>
+  </p>
+</div>
+<div class="preview">
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <div cdkDrag class="div-page example-box" *ngFor="let page of PDFPages; let i = index"
+      [class.active]="i === SelectedPage" (click)="viewPage(i)">
+      <img [src]="page.PageThumnail" matTooltip="Click to preview or drag/drop to rearrange file">
+      <p class="preview-header">
+        Page {{i+1}} | <span (click)="delteme(i)" class="delete-page">Delete
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="page-view" *ngIf="PDFPage">
+  <img [src]="PDFPage.PageThumnail">
+</div>
+<div id="viewport" role="main"></div>
